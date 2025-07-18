@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart Details</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo">MJ Tech & style </div>
+    <nav class="nav-buttons">
+      <a href="index.html" class="nav-btn">Add Product</a>
+      <a href="cart.html" class="nav-btn">Cart Detail</a>
+      <div class="cart-icon">🛒 <span id="cart-count">0</span></div>
+    </nav>
+  </header>
+
+  <main class="cart-section">
+    <h2 class="section-title">Your Shopping Cart</h2>
+    <div id="cart-items" class="cart-items"></div>
+
+    <div class="cart-summary">
+      <p>Total Quantity: <span id="total-qty">0</span></p>
+      <p>Total Price: Rs. <span id="total-price">0</span></p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p>&copy; 2025 MJ Tech and style  All rights reserved.</p>
+      <div class="social-icons">
+        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </footer>
+
+   <script>
+    function loadCart() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || {};
+  const cartItems = document.getElementById("cart-items");
+  const totalQtyEl = document.getElementById("total-qty");
+  const totalPriceEl = document.getElementById("total-price");
+  const cartCount = document.getElementById("cart-count");
+
+  cartItems.innerHTML = "";
+  let totalQty = 0;
+  let totalPrice = 0;
+
+  Object.values(cart).forEach(item => {
+    const itemEl = document.createElement("div");
+    itemEl.className = "cart-item";
+    itemEl.innerHTML = `
+      <img src="${item.image}" alt="${item.name}" class="cart-item-image" />
+      <div class="cart-item-details">
+        <h4>${item.name}</h4>
+        <p>Rs ${item.price}</p>
+      </div>
+      <div class="cart-item-controls">
+        <button onclick="updateQuantity(${item.id}, -1)">−</button>
+        <span>${item.quantity}</span>
+        <button onclick="updateQuantity(${item.id}, 1)">+</button>
+      </div>
+    `;
+    cartItems.appendChild(itemEl);
+
+    totalQty += item.quantity;
+    totalPrice += item.quantity * item.price;
+  });
+
+  totalQtyEl.innerText = totalQty;
+  totalPriceEl.innerText = totalPrice;
+  cartCount.innerText = totalQty;
+}
+
+function updateQuantity(id, change) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || {};
+  if (!cart[id]) return;
+
+  cart[id].quantity += change;
+
+  if (cart[id].quantity <= 0) {
+    delete cart[id];
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  loadCart();
+}
+
+window.onload = loadCart;
+
+   </script>
+</body>
+</html>

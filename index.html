@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini E-Commerce - Products</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo">MJ Tech & style</div>
+    <nav class="nav-buttons">
+      <a href="index.html" class="nav-btn">Add Product</a>
+      <a href="cart.html" class="nav-btn">Cart Detail</a>
+      <div class="cart-icon" onclick="goToCart()">🛒 <span id="cart-count">0</span></div>
+    </nav>
+  </header>
+
+  <main class="product-container" id="product-list"></main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p>&copy; 2025 MJ Tech and style All rights reserved.</p>
+      <div class="social-icons">
+        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ✅ Add to Cart Popup -->
+  <div id="cart-popup"><i class="fas fa-check-circle"></i> Added to cart!</div>
+
+  <script>
+    const products = [
+      { id: 1, name: "Airbuds Pro", price: 3200, image: "assets/product1.jpg" },
+      { id: 2, name: "HDMI Cable", price: 850, image: "assets/product2.jpg" },
+      { id: 3, name: "Smartwatch", price: 2999, image: "assets/product3.jpg" },
+      { id: 4, name: "Wireless Mouse", price: 1450, image: "assets/product4.jpg" }
+    ];
+
+    const productList = document.getElementById("product-list");
+
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || {};
+      let total = 0;
+      for (const id in cart) {
+        total += cart[id].quantity;
+      }
+      document.getElementById("cart-count").innerText = total;
+    }
+
+    function addToCart(id) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || {};
+      if (cart[id]) {
+        cart[id].quantity += 1;
+      } else {
+        const product = products.find(p => p.id === id);
+        cart[id] = { ...product, quantity: 1 };
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+      showCartPopup(); // ✅ show popup
+    }
+
+    function showCartPopup() {
+      const popup = document.getElementById("cart-popup");
+      popup.classList.add("show");
+
+      setTimeout(() => {
+        popup.classList.remove("show");
+      }, 3000);
+    }
+
+    function goToCart() {
+      window.location.href = "cart.html";
+    }
+
+    function renderProducts() {
+      products.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${p.image}" alt="${p.name}" />
+          <h3>${p.name}</h3>
+          <p>Rs ${p.price}</p>
+          <button onclick="addToCart(${p.id})">Add to Cart</button>
+        `;
+        productList.appendChild(card);
+      });
+    }
+
+    renderProducts();
+    updateCartCount();
+  </script>
+</body>
+</html>
