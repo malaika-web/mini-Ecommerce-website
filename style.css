@@ -20,6 +20,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 2.5rem; /* default font size */
+  text-align: left;  /* default alignment */
+  font-weight: bold; /* agar chahiye to */
   flex-wrap: wrap;
   background-color: #1565c0; /* Deep royal blue */
   color: white;
@@ -361,6 +364,7 @@ body {
 }
 
 
+
 /* Responsive Styles */
 @media (max-width: 900px) {
   .product-container {
@@ -409,7 +413,9 @@ body {
 
 @media (max-width: 480px) {
   .logo {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
+    text-align: center;   /* center align mobile pe */
+
   }
   .product-card img {
     height: 160px;
@@ -419,3 +425,18 @@ body {
     font-size: 0.95rem;
   }
 }
+
+@media (max-width: 600px) {
+  .product-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Optional spacing between cards */
+    align-items: center; /* Center cards */
+  }
+
+  .product-card {
+    width: 90%; /* Optional: full-width with margin */
+  }
+}
+
+  
